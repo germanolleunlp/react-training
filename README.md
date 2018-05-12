@@ -10,17 +10,25 @@ Additionally, please feel free to change the code style as you see fit.
 Please note - React version for this exercise is 15.5.4
 
 ```js
+
+// This import will fail, you need to add the {} between 'Component' 
+// to specify the 'Component' module to import from 'react'
 import React, Component from 'react';
+
+// If we assume that 'queryAPI' is the same level as this file, you need to add './'
+// to specify the relative path
 import queryAPI from 'queryAPI';
 
-
+// The idea to extends from 'Component' is to have a state
 class ShowResultsFromAPI extends Component() {
   constructor() {
     super(props);
 
+    // Never used
     this.container = null;
   }
 
+  // BAD! Anti-pattern modify the props, they should be read only
   onDisableDelay() {
     this.props.apiQueryDelay = 0;
   }
@@ -56,7 +64,7 @@ class ShowResultsFromAPI extends Component() {
               }
             }
           </div>
-          <Button onClick={this.onDisableDelay.bind(this)}>Disable request delay</Button>
+          <Button onClick={this.onDisableDelay}>Disable request delay</Button>
           <Button onClick={this.click.bind(this)}>Request data from endpoint</Button>
   }
 }
