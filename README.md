@@ -66,12 +66,12 @@ class ShowResultsFromAPI extends Component() {
     // <div ... ref={this.container}>
     return <div class="content-container" ref="container">
             {
-              // Missing () between if/else, 'error' and 'data', should be used by
-              // 'this.state'
+              // Incorrect if/else statement
+              // 2. 'error' and 'data', should be used by 'this.state' or declared before the
+              // return statement
               if (!!error) {
                 <p>Sorry - there was an error with your request.</p>
               }
-              // Missing ()
               else {
                 <p>data</p>
               }
@@ -80,11 +80,19 @@ class ShowResultsFromAPI extends Component() {
 
           // <Button> looks like a React's component, but is not declared, 
           // instead you can use the native <button>
-          <Button onClick={this.onDisableDelay}>Disable request delay</Button>
-          // In this version of react is not necessary bind the function.
-          // Also, in newer versions of react you can avoid this defining your methods as 
+          // Here you are using two different ways to bind a function to an event
+          // Is better follow one approach an be consistent.
+          // Also, to bind the 'onDisableDelay', you should:
+          // 1. Bind it in the constructor, like this.onDisableDelay = this.onDisableDelay.bind(this)
+          // 2. Depends of the babel preset that you are using you can handle this with a different
+          // way to declare the functions.
+          <Button onClick={this.onDisableDelay}>Disable request delay</Button>.
+          // If you are using 'babel-preset-stage-0' you can avoid this defining your methods as 
           // arrow functions, for example:
           // click = () => { .. }
+          // then just use the 'click' function like: 'onClick={this.click}', but be aware
+          // than you will receive the 'event' as params, if you need to pass a param,
+          // is better declare an arrow function inside of the 'onClick'
           <Button onClick={this.click.bind(this)}>Request data from endpoint</Button>
   }
 }
