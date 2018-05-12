@@ -42,9 +42,11 @@ class ShowResultsFromAPI extends Component() {
   }
 
   fetchData() {
+    // Missing catch in the promise to handle API's errors
     queryAPI()
       .then(function(response) {
         if (response.data) {
+          // state did not defined in the constructor
           this.setState({
             data: response.data,
             error: false
@@ -54,30 +56,64 @@ class ShowResultsFromAPI extends Component() {
   }
 
   render() {
+    // 1. Missing () between return statement
+    // 2. React component should return only ONE DOM's element, here you are returning
+    // first a <div> and the two others components outside.
+    // You need wrap all of this in one single element.
+    // 3. Use className instead of class to defined CSS's class selectors
+    // 4. The correct way to use 'ref' is to create one ref in the constructor 
+    // with `this.container = React.createRef()` and the add the reference here
+    // <div ... ref={this.container}>
     return <div class="content-container" ref="container">
             {
+              // Missing () between if/else, 'error' and 'data', should be used by
+              // 'this.state'
               if (!!error) {
                 <p>Sorry - there was an error with your request.</p>
               }
+              // Missing ()
               else {
                 <p>data</p>
               }
             }
           </div>
+
+          // <Button> looks like a React's component, but is not declared, 
+          // instead you can use the native <button>
           <Button onClick={this.onDisableDelay}>Disable request delay</Button>
+          // In this version of react is not necessary bind the function.
+          // Also, in newer versions of react you can avoid this defining your methods as 
+          // arrow functions, for example:
+          // click = () => { .. }
           <Button onClick={this.click.bind(this)}>Request data from endpoint</Button>
   }
 }
 
+// The for 'displayName' is to set a different name for debugging purposes.
+// Also the 'name' be default is inferred from the name of the function, in this case
+// the class component's name, 'ShowResultsFromAPI', and is the same as the given name,
+// completely redundant here
 ShowResultsFromAPI.displayName = {
   name: "ShowResultsFromAPI"
 };
 ShowResultsFromAPI.defaultProps = {
   apiQueryDelay: 0
 };
+
+// In this version of React and +, the propTypes was removed from React,
+// you need to import them:
+// import PropTypes from 'prop-types';
+// and then define the propTypes like:
+// ShowResultsFromAPI.propTypes = {
+//   apiQueryDelay: PropTypes.number
+// };
 ShowResultsFromAPI.propTypes = {
   apiQueryDelay: React.propTypes.number
 };
 
+// ContentContainer is not defined, instead you need to export the ShowResultsFromAPI
 export ContentContainer;
+
+// If this component will be used as root, you need to add it to the DOM, like:
+// ReactDOM.render(<ShowResultsFromAPI apiQueryDelay={1000}/>, document.getElementById("root"));
 ```
